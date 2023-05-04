@@ -1,12 +1,13 @@
 import type { User } from '@/stores/user'
 import { Api } from '../core/api'
 
-export function loginUser() {
+export async function loginUser() {
   const user: User = {
     userName: 'test',
     firstName: 'John',
     lastName: 'Doe',
     title: 'DC1'
   }
-  return Api.mock(user)
+  const response = Api.mock(user)
+  return response
 }

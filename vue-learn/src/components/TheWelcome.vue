@@ -5,12 +5,14 @@ import router from '../router'
 import WelcomeItem from './WelcomeItem.vue'
 import DocumentationIcon from './icons/IconDocumentation.vue'
 import { loginUser } from '@/services'
+import {useUserStore} from '@/stores'
 
 const username = ref('')
 const password = ref('')
 async function login() {
   const user = await loginUser()
   console.log(user)
+  useUserStore().updateUser(user)
   router.push({ name: 'about' })
 }
 </script>

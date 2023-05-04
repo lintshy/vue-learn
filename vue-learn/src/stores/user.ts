@@ -3,21 +3,21 @@ import { defineStore } from 'pinia'
 
 
 export type User = {
-    userName:string
-    firstName:string
-    lastName?:string
-    title?:string
+  userName?: string
+  firstName?: string
+  lastName?: string
+  title?: string
 }
 export const useUserStore = defineStore('user', () => {
   const user = ref<User>({
-    userName:'',
-    firstName:'',
-    lastName:'',
-    title:''
+    userName: '',
+    firstName: '',
+    lastName: '',
+    title: ''
   })
-  const isAuthorized = computed(()=>user.value.userName)
- 
-  function updateUser(userData:User) {
+  const isAuthorized = computed(() => user.value.userName)
+
+  function updateUser(userData: User) {
     user.value = Object.assign(userData)
   }
 
