@@ -1,6 +1,6 @@
 <script setup lang="ts">
 import { RouterLink, RouterView } from 'vue-router'
-import HelloWorld from './components/HelloWorld.vue'
+import TitleCard from './components/molecules/TitleCard.vue'
 </script>
 
 <template>
@@ -8,7 +8,7 @@ import HelloWorld from './components/HelloWorld.vue'
     <img alt="Vue logo" class="logo" src="@/assets/logo.svg" width="125" height="125" />
 
     <div class="wrapper">
-      <HelloWorld msg="Welcome to my first Dumb App!" />
+      <TitleCard msg="Welcome to my user inventory app!" />
     </div>
   </header>
 

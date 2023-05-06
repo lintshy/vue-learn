@@ -1,9 +1,9 @@
 <script setup lang="ts">
 import { ref } from 'vue'
 
-import router from '../router'
-import WelcomeItem from './WelcomeItem.vue'
-import DocumentationIcon from './icons/IconDocumentation.vue'
+import router from '../../router'
+import WelcomeItem from '../atoms/WelcomeItem.vue'
+import DocumentationIcon from '../icons/IconDocumentation.vue'
 import { loginUser } from '@/services'
 import { useUserStore } from '@/stores'
 

@@ -1,15 +1,19 @@
 <script setup lang="ts">
 import { reactive, ref } from 'vue'
+
 import { useUserStore } from '../stores'
 import router from '@/router'
 import { updateUser } from '@/services'
+import Profile from '../components/atoms/Profile.vue'
 
-const titleClass = ref('about')
+
 const store = useUserStore()
 const user = reactive(store.user)
-const saveError = ref(false)
 
+const saveError = ref(false)
 const isEditable = ref(false)
+const titleClass = ref('about')
+
 function logout() {
   store.$reset
   router.back()
@@ -19,17 +23,13 @@ function toggleEdit() {
   isEditable.value = !isEditable.value
 }
 async function saveProfile() {
-  //@ts-ignore
-  console.log(user)
   const res = await updateUser({ firstName: user.firstName, lastName: user.lastName, title: user.title, id: user.id })
-
   if (!res) {
     saveError.value = true
     return
   }
   saveError.value = false
   store.updateUser(res)
-
   toggleEdit()
 }
 
@@ -37,17 +37,7 @@ async function saveProfile() {
 
 <template>
   <div :class="titleClass">
-    <div v-if="isEditable">
-      <input v-model="user.firstName" placeholder="firstname" />
-      <input v-model="user.lastName" placeholder="lastname" />
-      <input v-model="user.title" placeholder="title" />
-      <button @click="saveProfile">Save</button>
-
-    </div>
-    <div v-else>
-      <h1>Welcome {{ user.firstName }} {{ user.lastName }} </h1>
-      <p>title: {{ user.title }}</p>
-    </div>
+    <Profile :user="user" :is-editable="isEditable" @save-profile="saveProfile" />
     <button @click="toggleEdit">Edit your profile</button>
     <button @click="logout">Logout</button>
   </div>
