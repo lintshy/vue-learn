@@ -5,15 +5,23 @@ import router from '../router'
 import WelcomeItem from './WelcomeItem.vue'
 import DocumentationIcon from './icons/IconDocumentation.vue'
 import { loginUser } from '@/services'
-import {useUserStore} from '@/stores'
+import { useUserStore } from '@/stores'
 
 const username = ref('')
 const password = ref('')
+const isLoginError = ref(false)
+const store = useUserStore()
 async function login() {
-  const user = await loginUser()
+  const user = await loginUser(username.value, password.value)
   console.log(user)
-  useUserStore().updateUser(user)
-  router.push({ name: 'about' })
+  if (user) {
+    store.updateUser(user)
+    router.push({ name: 'about' })
+
+  }
+  isLoginError.value = true
+
+
 }
 </script>
 
@@ -29,6 +37,9 @@ async function login() {
   </WelcomeItem>
   <WelcomeItem>
     <input v-model="password" placeholder="password" type="password" />
+  </WelcomeItem>
+  <WelcomeItem>
+    <p v-if="isLoginError">Login Failed!!</p>
   </WelcomeItem>
   <WelcomeItem>
     <button @click="login">Login</button>

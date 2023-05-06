@@ -1,11 +1,14 @@
 <script setup lang="ts">
-import { ref } from 'vue'
+import { reactive, ref } from 'vue'
 import { useUserStore } from '../stores'
 import router from '@/router'
+import { updateUser } from '@/services'
+
 const titleClass = ref('about')
 const store = useUserStore()
-const user = ref(store.user)
-const { firstName, lastName, title } = user.value
+const user = reactive(store.user)
+const saveError = ref(false)
+
 const isEditable = ref(false)
 function logout() {
   store.$reset
@@ -15,9 +18,18 @@ function logout() {
 function toggleEdit() {
   isEditable.value = !isEditable.value
 }
-function saveProfile() {
-  console.log()
-  store.updateUser({ firstName, lastName, title })
+async function saveProfile() {
+  //@ts-ignore
+  console.log(user)
+  const res = await updateUser({ firstName: user.firstName, lastName: user.lastName, title: user.title, id: user.id })
+
+  if (!res) {
+    saveError.value = true
+    return
+  }
+  saveError.value = false
+  store.updateUser(res)
+
   toggleEdit()
 }
 
@@ -26,15 +38,15 @@ function saveProfile() {
 <template>
   <div :class="titleClass">
     <div v-if="isEditable">
-      <input v-model="firstName" placeholder="firstname" />
-      <input v-model="lastName" placeholder="lastname" />
-      <input v-model="title" placeholder="title" />
+      <input v-model="user.firstName" placeholder="firstname" />
+      <input v-model="user.lastName" placeholder="lastname" />
+      <input v-model="user.title" placeholder="title" />
       <button @click="saveProfile">Save</button>
 
     </div>
     <div v-else>
-      <h1>Welcome {{ firstName }} {{ lastName }} </h1>
-      <p>title: {{ title }}</p>
+      <h1>Welcome {{ user.firstName }} {{ user.lastName }} </h1>
+      <p>title: {{ user.title }}</p>
     </div>
     <button @click="toggleEdit">Edit your profile</button>
     <button @click="logout">Logout</button>
