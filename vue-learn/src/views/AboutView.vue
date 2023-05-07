@@ -1,14 +1,16 @@
 <script setup lang="ts">
 import { reactive, ref } from 'vue'
 
-import { useUserStore } from '../stores'
+import { useUserStore, useInventoryStore } from '../stores'
 import router from '@/router'
-import { updateUser } from '@/services'
+import { getOpenInventory, updateUser } from '@/services'
 import Profile from '../components/atoms/Profile.vue'
+import InventoryList from '../components/molecules/InventoryList.vue'
 
 
 const store = useUserStore()
 const user = reactive(store.user)
+console.log(store.user)
 
 const saveError = ref(false)
 const isEditable = ref(false)
@@ -22,6 +24,14 @@ function logout() {
 function toggleEdit() {
   isEditable.value = !isEditable.value
 }
+
+async function getInventoryData() {
+  const inventory = await getOpenInventory()
+  const inventoryStore = useInventoryStore()
+  inventoryStore.updateInventory(inventory)
+  router.push({ name: 'open-inventory' })
+
+}
 async function saveProfile() {
   const res = await updateUser({ firstName: user.firstName, lastName: user.lastName, title: user.title, id: user.id })
   if (!res) {
@@ -32,6 +42,9 @@ async function saveProfile() {
   store.updateUser(res)
   toggleEdit()
 }
+function onKeyPress(e: any) {
+  console.log(e)
+}
 
 </script>
 
@@ -39,6 +52,9 @@ async function saveProfile() {
   <div :class="titleClass">
     <Profile :user="user" :is-editable="isEditable" @save-profile="saveProfile" />
     <button @click="toggleEdit">Edit your profile</button>
+
+    <InventoryList :inventory="user.inventory" title="User inventory" @filter="onKeyPress" />
+    <button @click="getInventoryData">Purchase from Market</button>
     <button @click="logout">Logout</button>
   </div>
 

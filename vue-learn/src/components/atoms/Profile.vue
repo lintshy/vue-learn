@@ -1,9 +1,5 @@
 <script setup lang="ts">
-import { reactive } from 'vue';
-
 import type { User } from '@/stores';
-
-
 defineProps<{
     user: User,
     isEditable: boolean

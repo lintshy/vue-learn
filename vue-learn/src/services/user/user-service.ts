@@ -4,7 +4,7 @@ import { Api } from '../core/api'
 export async function loginUser(username: string, password: string) {
   const queryData = {
     "operationName": "LoginUser",
-    "query": "query LoginUser($userName: String, $password: String) { loginUser(userName: $userName, password: $password) { firstName lastName title id }}",
+    "query": "query LoginUser($userName: String, $password: String) { loginUser(userName: $userName, password: $password) { firstName id inventory { status purchaseDate name inventoryId imageUrl description category } lastName title userName }}",
     "variables": {
       "userName": `${username}`,
       "password": `${password}`
